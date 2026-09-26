@@ -82,6 +82,14 @@ export default async function DashboardPage() {
           </div>
 
           <div className="flex items-center space-x-4">
+            {isAdmin && (
+              <Link
+                href="/dashboard/projects/new"
+                className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500 transition-colors"
+              >
+                + New Project
+              </Link>
+            )}
             <div className="flex items-center space-x-2">
               <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
                 {dbUser.name || user.email}
@@ -140,7 +148,8 @@ export default async function DashboardPage() {
           </div>
 
           <div className="text-sm text-slate-500 dark:text-slate-400">
-            {projects.length} {projects.length === 1 ? "project" : "projects"} found
+            {projects.length} {projects.length === 1 ? "project" : "projects"}{" "}
+            found
           </div>
         </div>
 

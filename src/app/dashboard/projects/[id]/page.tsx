@@ -125,6 +125,7 @@ export default async function ProjectDetailPage({
             <ProjectStatusControl
               projectId={project.id}
               currentStatus={project.status}
+              isAdmin={isAdmin}
             />
           </div>
 
