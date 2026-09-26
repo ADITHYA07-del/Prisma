@@ -1,0 +1,54 @@
+// Prisma ORM Schema configuration
+// Note: "Prisma" in this context refers to the database ORM, distinct from the app name "Prisma".
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Role {
+  ADMIN
+  MEMBER
+}
+
+enum ProjectStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+}
+
+model User {
+  id             String          @id @default(uuid())
+  authId         String          @unique // maps to Supabase auth.users.id
+  name           String
+  email          String          @unique
+  role           Role            @default(MEMBER)
+  createdAt      DateTime        @default(now())
+  projectMembers ProjectMember[]
+}
+
+model Project {
+  id          String          @id @default(uuid())
+  name        String
+  description String?
+  status      ProjectStatus   @default(NOT_STARTED)
+  createdAt   DateTime        @default(now())
+  completedAt DateTime?
+  members     ProjectMember[]
+}
+
+model ProjectMember {
+  id        String   @id @default(uuid())
+  projectId String
+  userId    String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([projectId, userId])
+}
